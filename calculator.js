@@ -1,3 +1,8 @@
+var addModule = require("./modules/add.js");
+var subtractModule = require("./modules/subtract.js");
+var multiplyModule = require("./modules/multiply.js");
+var divideModule = require("./modules/divide.js");
+var validate = require("./modules/validate.js");
 /**
  * Declare a function named `calculatorModule`
  * this function will have two private variables declared inside of it.
@@ -6,8 +11,12 @@
  * @return {object} `calculator` object that can be used
  */
 var calculatorModule = function() {
-  var _memory = 0;
-  var _total = 0;
+
+  var _calculatorState = {
+    memory : 0,
+    total : 0
+  }
+
 
   /**
    * sets the `total` to the number passed in
@@ -15,17 +24,18 @@ var calculatorModule = function() {
    * @return { Number }    current total
    */
   var load = function(x) {
-    if(typeof x !== 'number') throw new Error('Not a number!');
-    _total = x;
-    return _total;
+    validate(x);
+    _calculatorState.total = x;
+    return _calculatorState.total;
   }
+
 
   /**
    * Return the value of `total`
    * @return { Number }
    */
    var getTotal = function() {
-    return _total;
+    return _calculatorState.total;
    }
 
 
@@ -33,40 +43,28 @@ var calculatorModule = function() {
    * Sums the value passed in with `total`
    * @param { Number } x
    */
-   var add = function(x) {
-    if(typeof x !== 'number') throw new Error('Not a number!');
-    _total += x;
-   }
+   var add = addModule(_calculatorState);
 
 
   /**
    * Subtracts the value passed in from `total`
    * @param  { Number } x
    */
-   var subtract = function(x) {
-    if(typeof x !== 'number') throw new Error('Not a number!');
-    _total -= x;
-   }
+   var subtract = subtractModule(_calculatorState);
 
 
   /**
    * Multiplies the value by `total`
    * @param  { Number } x
    */
-   var multiply = function(x) {
-    if(typeof x !== 'number') throw new Error('Not a number!');
-    _total *= x;
-   }
+   var multiply = multiplyModule(_calculatorState);
 
 
   /**
    * Divides the value passing in by `total`
    * @param  { Number } x
    */
-   var divide = function(x) {
-    if(typeof x !== 'number') throw new Error('Not a number!');
-    _total /= x;
-   }
+   var divide = divideModule(_calculatorState);
 
 
   /**
@@ -74,7 +72,7 @@ var calculatorModule = function() {
    * @return { Number }
    */
    var recallMemory = function() {
-    return _memory;
+    return _calculatorState.memory;
    }
 
 
@@ -82,14 +80,14 @@ var calculatorModule = function() {
    * Stores the value of `total` to `memory`
    */
    var saveMemory = function() {
-    _memory = _total;
+    _calculatorState.memory = _calculatorState.total;
    }
 
   /**
    * Clear the value stored at `memory`
    */
    var clearMemory = function() {
-    _memory = 0;
+    _calculatorState.memory = 0;
    }
 
   /**
@@ -109,3 +107,5 @@ var calculatorModule = function() {
    }
 
 }
+
+module.exports = calculatorModule;
